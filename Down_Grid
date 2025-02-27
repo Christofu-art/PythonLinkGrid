@@ -18,18 +18,18 @@ keys = [False, False, False, False, False] #this list holds whether each key has
 # MAP: 2 is brick
 map = [
     [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 0, 0, 0, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2],
-    [2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
     [2, 0, 2, 0, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2],
     [2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2],
     [2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 2],
-    [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2],
+    [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
     [2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
     [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2],
     [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
     [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
     [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
     [2, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -40,7 +40,9 @@ map = [
 
 
 brick = pygame.image.load('brick.png')  # load your spritesheet
-Link = pygame.image.load('link.png')  # load your spritesheet
+Link = pygame.image.load('link.png')
+dirt = pygame.image.load('dirt.png')
+door = pygame.image.load('door.png')     # load your spritesheet
 #Rock = pygame.image.load('ROCKWALL.png') # load your spritesheet
 #Puddle = pygame.image.load('Puddle.png') # load your spritesheet
 Link.set_colorkey((255, 0, 255))  # this makes bright pink (255, 0, 255) transparent (sort of)
@@ -159,7 +161,23 @@ while not gameover:
         ypos-=3  
         print("right collision!")
 
+    #Door collision
+    #up collision
+    if map[int((ypos-5) / 40)][int((xpos) / 40)] == 4:
+        ypos+=3  
+        print("right collision!")
+    #down collision
+    if map[int((ypos+25) / 40)][int((xpos) / 40)] == 4:
+        ypos-=3  
+        print("right collision!")
 
+    #warp check
+    print(xpos, ypos)
+    if ypos>=247 and ypos<=253 and xpos<0:
+        xpos = 757
+        ypos = 247
+
+    #if map[int((ypos+25) / 40)][int((xpos) / 40)] == 5:   
 
     xpos+=vx #update player xpos
     ypos += vy
@@ -179,10 +197,14 @@ while not gameover:
         for j in range(20):
             if map[i][j] == 2:
                 screen.blit(brick, (j * 40, i * 40), (0, 0, 40, 40))
+            #if map[i][j] == 3:
+                #screen.blit(dirt, (j * 40, i * 40), (0, 0, 40, 40))
             #elif map[i][j] == 3:
                 #screen.blit(Rock, (j * 40, i * 40), (0, 0, 40, 40))
             #elif map[i][j] == 4:
                 #screen.blit(Puddle, (j * 40, i * 40), (0, 0, 40, 40))
+            elif map[i][j] == 4:
+                screen.blit(door, (j * 40, i * 40), (0, 0, 40, 40))
 
     # draw player
     screen.blit(Link, (xpos, ypos), (frameWidth * frameNum, RowNum * frameHeight, frameWidth, frameHeight))

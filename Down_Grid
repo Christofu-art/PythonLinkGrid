@@ -51,6 +51,11 @@ Link.set_colorkey((255, 0, 255))  # this makes bright pink (255, 0, 255) transpa
 xpos = 400  # xpos of player
 ypos = 400  # ypos of player
 
+#item variable
+itemX = 500
+itemY = 500
+hasItem1 = False
+
 # animation variables variables
 frameWidth = 13
 frameHeight = 20
@@ -143,21 +148,21 @@ while not gameover:
 
     ###ROCK COLLISION
     #left collision
-    if map[int((ypos) / 40)][int((xpos - 5) / 40)] == 3 :
+    if map[int((ypos) / 40)][int((xpos - 5) / 40)] == 5 :
         xpos+=3
         print("left collision!")
    
     #right collision
-    if map[int((ypos) / 40)][int((xpos +20) / 40)] == 3 :
+    if map[int((ypos) / 40)][int((xpos +20) / 40)] == 5 :
         xpos-=3
         print("left collision!")
        
     #up collision
-    if map[int((ypos-5) / 40)][int((xpos) / 40)] == 3:
+    if map[int((ypos-5) / 40)][int((xpos) / 40)] == 5:
         ypos+=3  
         print("right collision!")
     #down collision
-    if map[int((ypos+25) / 40)][int((xpos) / 40)] == 3:
+    if map[int((ypos+25) / 40)][int((xpos) / 40)] == 5:
         ypos-=3  
         print("right collision!")
 
@@ -180,7 +185,7 @@ while not gameover:
     #if map[int((ypos+25) / 40)][int((xpos) / 40)] == 5:   
 
     xpos+=vx #update player xpos
-    ypos += vy
+    ypos+=vy
 
     # Animation update
     ticker+=1
@@ -189,7 +194,13 @@ while not gameover:
             frameNum += 1
     if frameNum > 7:
         frameNum = 0
-
+    
+    # Item collision
+    if xpos>490 and xpos<500 and ypos>480 and ypos<500:
+        #print("collision!")
+        hasItem1 = True
+    
+    print(xpos, ypos) #helps find the location for stuff    
     # Render section--------------------------------------------------------
     screen.fill((0, 0, 0))  # wipe screen so it doesn't smear
     # draw map
@@ -197,14 +208,17 @@ while not gameover:
         for j in range(20):
             if map[i][j] == 2:
                 screen.blit(brick, (j * 40, i * 40), (0, 0, 40, 40))
-            #if map[i][j] == 3:
-                #screen.blit(dirt, (j * 40, i * 40), (0, 0, 40, 40))
+            if map[i][j] == 3:
+                screen.blit(dirt, (j * 40, i * 40), (0, 0, 40, 40))
             #elif map[i][j] == 3:
                 #screen.blit(Rock, (j * 40, i * 40), (0, 0, 40, 40))
             #elif map[i][j] == 4:
                 #screen.blit(Puddle, (j * 40, i * 40), (0, 0, 40, 40))
             elif map[i][j] == 4:
                 screen.blit(door, (j * 40, i * 40), (0, 0, 40, 40))
+    #item
+    if hasItem1 == False:
+        pygame.draw.rect(screen, (50, 80, 200), (itemX, itemY, 20, 20))
 
     # draw player
     screen.blit(Link, (xpos, ypos), (frameWidth * frameNum, RowNum * frameHeight, frameWidth, frameHeight))
